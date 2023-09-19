@@ -14,6 +14,7 @@
         <module>ConfirmPublish</module>
         <module>ExchangeDemo</module>
         <module>DeadQueue</module>
+        <module>TTLQueue</module>
     </modules>
 
     <properties>
