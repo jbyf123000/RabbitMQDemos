@@ -11,6 +11,7 @@
     <modules>
         <module>Demo1</module>
         <module>WorkeQueue</module>
+        <module>ConfirmPublish</module>
     </modules>
 
     <properties>
