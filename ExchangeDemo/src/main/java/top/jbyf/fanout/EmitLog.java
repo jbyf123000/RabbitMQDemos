@@ -2,9 +2,8 @@ package top.jbyf.fanout;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.MessageProperties;
-import top.jbyf.fanout.config.RabbitMqUtils;
+import top.jbyf.config.RabbitMqUtils;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class EmitLog {

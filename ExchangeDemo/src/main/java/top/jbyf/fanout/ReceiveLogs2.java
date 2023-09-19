@@ -2,7 +2,7 @@ package top.jbyf.fanout;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
-import top.jbyf.fanout.config.RabbitMqUtils;
+import top.jbyf.config.RabbitMqUtils;
 
 public class ReceiveLogs2 {
     private static final String EXCHANGE_NAME = "fanout::exchange";

@@ -1,4 +1,4 @@
-package top.jbyf.fanout.config;
+package top.jbyf.config;
 
 public class SleepUtils {
     public static void sleep(int second){

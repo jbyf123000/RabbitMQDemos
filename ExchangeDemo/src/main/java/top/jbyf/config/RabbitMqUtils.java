@@ -1,4 +1,4 @@
-package top.jbyf.fanout.config;
+package top.jbyf.config;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
