@@ -8,7 +8,8 @@ import top.jbyf.config.RabbitMqUtils;
 import java.util.Scanner;
 
 public class Publisher01 {
-    public static final String QUEUE_NAME="task2";
+//    public static final String QUEUE_NAME="task2";
+    public static final String QUEUE_NAME="task_unfair";
 
     public static void main(String[] args) throws Exception {
         Channel channel = RabbitMqUtils.getChannel();
