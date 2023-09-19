@@ -23,6 +23,8 @@ public class Consumer1 {
         params.put("x-dead-letter-exchange",DEAD_EXCHANGE);
         //指定死信队列routingkey
         params.put("x-dead-letter-routing-key",DEAD_ROUTING_KEY);
+        //设定长度限制
+        params.put("x-max-length",6);
         //创建死信队列交换机和普通交换机
         channel.exchangeDeclare(NORMAL_EXCHANGE, BuiltinExchangeType.DIRECT);
         channel.exchangeDeclare(DEAD_EXCHANGE, BuiltinExchangeType.DIRECT);

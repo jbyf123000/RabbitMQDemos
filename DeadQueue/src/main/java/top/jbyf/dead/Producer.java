@@ -15,7 +15,7 @@ public class Producer {
                 .build();
         for (int i = 0; i < 10; i++) {
             String message = "info::" + i;
-            channel.basicPublish(Consumer1.NORMAL_EXCHANGE,Consumer1.NORMAL_ROUTING_KEY,properties,message.getBytes());
+            channel.basicPublish(Consumer1.NORMAL_EXCHANGE,Consumer1.NORMAL_ROUTING_KEY,null,message.getBytes());
             System.out.println("已发送消息");
         }
     }
