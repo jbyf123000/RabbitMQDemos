@@ -1,9 +1,11 @@
 package top.jbyf.confirm;
 
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.ConfirmCallback;
 import com.rabbitmq.client.MessageProperties;
 import top.jbyf.confirm.config.RabbitMqUtils;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -27,9 +29,10 @@ public class Publisher {
     public static void main(String[] args) throws Exception {
 //        publishMessageIndividually();
         //单个确认发布 1000 次工作时间： 10163  ms
-        publishMessageBatch();
+//        publishMessageBatch();
         // 批量确认发布 1000 次工作时间： 192  ms
-
+        publishMessageAsync();
+        // 异步确认发布 1000 次工作时间： 92  ms
     }
 
     /**
@@ -80,5 +83,42 @@ public class Publisher {
         long endTime = System.currentTimeMillis();
         System.out.println("批量确认发布 " + MESSAGE_COUNT + " 次工作时间： " + (endTime - beginTime) + "  ms");
 
+    }
+
+
+    /**
+     * 异步发布确认
+     * @throws Exception
+     */
+    public static void publishMessageAsync() throws Exception{
+        Channel channel = RabbitMqUtils.getChannel();
+        String queueName = UUID.randomUUID().toString();
+        channel.queueDeclare(queueName, false, false, false, null);
+        //开启发布确认
+        channel.confirmSelect();
+        long beginTime = System.currentTimeMillis();
+        ArrayList<String> nack = new ArrayList<>();
+
+        // 消息发送成功
+        ConfirmCallback ackCallback = (deliveryTag,multiple)->{
+            System.out.println("确认的消息：" + deliveryTag);
+        };
+        // 消息发送失败
+        ConfirmCallback nackCallback = (deliveryTag,multiple)->{
+            System.out.println("未确认的消息：" + deliveryTag);
+            nack.add(deliveryTag + "");
+        };
+
+        // 消息监听器,监听成功的消息和失败的消息
+        channel.addConfirmListener(ackCallback,nackCallback);
+
+        for (int i = 0; i < MESSAGE_COUNT; i++) {
+            String message = "消息：" + i;
+            channel.basicPublish("",queueName,null,message.getBytes("UTF-8"));
+        }
+
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("异步确认发布 " + MESSAGE_COUNT + " 次工作时间： " + (endTime - beginTime) + "  ms");
     }
 }
