@@ -12,6 +12,7 @@
         <module>Demo1</module>
         <module>WorkeQueue</module>
         <module>ConfirmPublish</module>
+        <module>ExchangeDemo</module>
     </modules>
 
     <properties>
