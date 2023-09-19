@@ -1,11 +1,12 @@
 package top.jbyf;
 
 import com.rabbitmq.client.Channel;
+import top.jbyf.config.RabbitMqUtils;
 
 import java.util.Scanner;
 
 public class Publisher01 {
-    public static final String QUEUE_NAME="hello";
+    public static final String QUEUE_NAME="task";
 
     public static void main(String[] args) throws Exception {
         Channel channel = RabbitMqUtils.getChannel();
@@ -15,7 +16,7 @@ public class Publisher01 {
         while (scanner.hasNext()){
             System.out.println("输入需要发送的消息：");
             String message = scanner.next();
-            channel.basicPublish("",QUEUE_NAME,null,message.getBytes());
+            channel.basicPublish("",QUEUE_NAME,null,message.getBytes("UTF-8"));
             System.out.println("消息发送完成");
         }
     }

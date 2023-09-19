@@ -3,9 +3,10 @@ package top.jbyf;
 import com.rabbitmq.client.CancelCallback;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
+import top.jbyf.config.RabbitMqUtils;
 
 public class Worker02 {
-    public static final String QUEUE_NAME = "hello";
+    public static final String QUEUE_NAME = "task";
     public static void main(String[] args) {
         try {
             Channel channel = RabbitMqUtils.getChannel();
