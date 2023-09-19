@@ -25,4 +25,15 @@ public class SendMsgController {
 
     }
 
+    @GetMapping("/sendExpirationMsg/{message}/{ttlTime}")
+    public void sendExpirationMsg (@PathVariable String message,
+                                   @PathVariable String ttlTime){
+        log.info("当前时间：{} , 发送时长为{}毫秒的TTL消息给队列QC：{}",new Date().toString(),ttlTime,message);
+        rabbitTemplate.convertAndSend("X","XC",message,(message1 -> {
+            // 设置发送消息时候的延迟时长
+            message1.getMessageProperties().setExpiration(ttlTime);
+            return message1;
+        }));
+    }
+
 }

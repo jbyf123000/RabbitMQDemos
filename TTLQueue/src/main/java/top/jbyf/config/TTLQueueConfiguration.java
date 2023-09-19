@@ -20,6 +20,7 @@ public class TTLQueueConfiguration {
     // 普通队列名称
     public static final String QUEUE_A = "QA";
     public static final String QUEUE_B = "QB";
+    public static final String QUEUE_C = "QC";
     // 死信队列名称
     public static final String DEAD_LETTER_QUEUE = "QD";
     public static final String Y_DEAD_LETTER_ROUTING_KEY = "YD";
@@ -98,5 +99,24 @@ public class TTLQueueConfiguration {
                 .bind(queueD)
                 .to(yExchange)
                 .with("YD");
+    }
+
+    @Bean
+    public Queue queueC(){
+        Map<String, Object> params = new HashMap<>();
+        params.put("x-dead-letter-exchange",Y_DEAD_LETTER_EXCHANGE);
+        params.put("x-dead-letter-routing-key","YD");
+        return QueueBuilder
+                .durable(QUEUE_C)
+                .withArguments(params)
+                .build();
+    }
+    @Bean
+    public Binding queueBindingX(@Qualifier("queueC") Queue queueC,
+                                 @Qualifier("xExchange") DirectExchange xExechange){
+        return BindingBuilder
+                .bind(queueC)
+                .to(xExechange)
+                .with("XC");
     }
 }
