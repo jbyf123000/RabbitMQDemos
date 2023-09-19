@@ -13,6 +13,7 @@
         <module>WorkeQueue</module>
         <module>ConfirmPublish</module>
         <module>ExchangeDemo</module>
+        <module>DeadQueue</module>
     </modules>
 
     <properties>
