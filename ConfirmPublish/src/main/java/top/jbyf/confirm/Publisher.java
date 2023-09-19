@@ -8,6 +8,9 @@ import top.jbyf.confirm.config.RabbitMqUtils;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public class Publisher {
     // 批量发消息的个数
@@ -96,25 +99,41 @@ public class Publisher {
         channel.queueDeclare(queueName, false, false, false, null);
         //开启发布确认
         channel.confirmSelect();
-        long beginTime = System.currentTimeMillis();
-        ArrayList<String> nack = new ArrayList<>();
+        /**
+         * 线程安全有序的hash表
+         * 1.轻松的将序号与消息进行关联
+         * 2.批量删除内容 只要给到序号
+         * 3.支持高并发
+         */
+        ConcurrentSkipListMap<Long,String> outStandingConfirms = new ConcurrentSkipListMap<>();
 
         // 消息发送成功
         ConfirmCallback ackCallback = (deliveryTag,multiple)->{
+            // 第二部：删除未确认的消息
+            if (multiple){
+                ConcurrentNavigableMap<Long, String> confirmed =
+                        outStandingConfirms.headMap(deliveryTag);
+            }
+            else {
+                outStandingConfirms.remove(deliveryTag);
+            }
             System.out.println("确认的消息：" + deliveryTag);
         };
         // 消息发送失败
         ConfirmCallback nackCallback = (deliveryTag,multiple)->{
-            System.out.println("未确认的消息：" + deliveryTag);
-            nack.add(deliveryTag + "");
+            String s = outStandingConfirms.get(deliveryTag);
+            System.out.println("未确认的消息是:" + s + "  未确认标记：" + deliveryTag);
         };
 
         // 消息监听器,监听成功的消息和失败的消息
         channel.addConfirmListener(ackCallback,nackCallback);
 
+        long beginTime = System.currentTimeMillis();
         for (int i = 0; i < MESSAGE_COUNT; i++) {
             String message = "消息：" + i;
             channel.basicPublish("",queueName,null,message.getBytes("UTF-8"));
+            // 第一步：记录下所有要发送的消息
+            outStandingConfirms.put(channel.getNextPublishSeqNo(),message);
         }
 
 
