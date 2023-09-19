@@ -24,7 +24,7 @@ public class Consumer1 {
         //指定死信队列routingkey
         params.put("x-dead-letter-routing-key",DEAD_ROUTING_KEY);
         //设定长度限制
-        params.put("x-max-length",6);
+//        params.put("x-max-length",6);
         //创建死信队列交换机和普通交换机
         channel.exchangeDeclare(NORMAL_EXCHANGE, BuiltinExchangeType.DIRECT);
         channel.exchangeDeclare(DEAD_EXCHANGE, BuiltinExchangeType.DIRECT);
@@ -37,10 +37,17 @@ public class Consumer1 {
 
         System.out.println("C1 wait for message.");
         DeliverCallback dCall = (consumerTag,message) -> {
-            System.out.println("C1 consumed a message: " + new String(message.getBody(),"UTF-8"));
+            String msg =new String(message.getBody(),"UTF-8");
+            if (msg.equals("info::5")){
+                System.out.println("C1 reject message:" + msg);
+                channel.basicReject(message.getEnvelope().getDeliveryTag(),false);
+            }else {
+                System.out.println("C1 consumed a message: " + msg);
+                channel.basicAck(message.getEnvelope().getDeliveryTag(),false);
+            }
         };
-
-        channel.basicConsume(NORMAL_QUEUE,true,dCall,(consumerTag -> {}));
+        // 开启手动应答
+        channel.basicConsume(NORMAL_QUEUE,false,dCall,(consumerTag -> {}));
 
 
     }
