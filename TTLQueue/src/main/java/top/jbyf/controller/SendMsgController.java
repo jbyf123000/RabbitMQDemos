@@ -42,7 +42,7 @@ public class SendMsgController {
     @GetMapping("sendDelayMsg/{message}/{delayTime}")
     public void sendDelayMsg(@PathVariable String message,
                              @PathVariable Integer delayTime){
-        log.info("当前时间：{} , 发送时长为{}毫秒的信息给延迟队列delayed.queue：{}",new Date().toString(),ttlTime,message);
+        log.info("当前时间：{} , 发送时长为{}毫秒的信息给延迟队列delayed.queue：{}",new Date().toString(),delayTime,message);
         rabbitTemplate.convertAndSend(DelayQueueConfig.DELAY_EXCHANGE_NAME,DelayQueueConfig.DELAY_ROUTING_KEY,message,(message1 -> {
             // 设置 发送消息时候的 延迟时长 单位：ms
             message1.getMessageProperties().setDelay(delayTime);
