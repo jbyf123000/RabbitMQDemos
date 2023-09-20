@@ -42,7 +42,7 @@ public class DelayQueueConfig {
     public Binding delayedQueueBindingdelayedExchange(@Qualifier("delayedQueue") Queue delayedQueue,
                                                       @Qualifier("delayedExchange") CustomExchange delayedExchange){
         return BindingBuilder
-                .bind(delayedExchange)
+                .bind(delayedQueue)
                 .to(delayedExchange)
                 .with(DELAY_ROUTING_KEY)
                 .noargs();
