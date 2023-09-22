@@ -24,12 +24,20 @@ public class ProducerController {
     private ConcurrentHashMap<String,String> sentMessage ;
     @GetMapping("/sendMessage/{message}")
     public void sendMessage(@PathVariable String message){
-        CorrelationData correlationData = new CorrelationData();
+        CorrelationData correlationData1 = new CorrelationData();
+        CorrelationData correlationData2 = new CorrelationData();
         String uuid = UUID.randomUUID().toString();
-        correlationData.setId(uuid);
+        correlationData1.setId(uuid);
         sentMessage.put(uuid,message);
-        rabbitTemplate.convertAndSend(ConfirmConfig.CONFIRM_EXCHANGE_NAME + 123,
-                ConfirmConfig.CONFIRM_ROUTING_KEY,message,correlationData);
+        rabbitTemplate.convertAndSend(ConfirmConfig.CONFIRM_EXCHANGE_NAME,
+                ConfirmConfig.CONFIRM_ROUTING_KEY,message,correlationData1);
+        log.info("当前时间：{} , 给给队列 发送信息：{}",new Date().toString(),message);
+
+        String uuid2 = UUID.randomUUID().toString();
+        correlationData2.setId(uuid2);
+        sentMessage.put(uuid2,message);
+        rabbitTemplate.convertAndSend(ConfirmConfig.CONFIRM_EXCHANGE_NAME,
+                ConfirmConfig.CONFIRM_ROUTING_KEY + 2  ,message,correlationData2);
         log.info("当前时间：{} , 给给队列 发送信息：{}",new Date().toString(),message);
     }
 }

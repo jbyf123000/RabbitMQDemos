@@ -38,10 +38,10 @@ public class MyConfirmCallback implements RabbitTemplate.ConfirmCallback {
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
         String id = null ==correlationData ? "" : correlationData.getId();
         if (ack){
-            log.info("交换机已经收到 id 为 :{} 的消息",sentMessage.get(id));
+            log.info("交换机已经收到 id 为 :{} 的消息:{}",id,sentMessage.get(id));
         }
         else {
-            log.info("交换机没有收到 id 为 :{} 的消息， 原因:{}",sentMessage.get(id),cause);
+            log.info("交换机没有收到 id 为 :{} 的消息:{}， 原因:{}",id,sentMessage.get(id),cause);
         }
     }
 }

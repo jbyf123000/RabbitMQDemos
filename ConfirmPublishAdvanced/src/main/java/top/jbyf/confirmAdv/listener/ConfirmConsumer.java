@@ -14,6 +14,6 @@ public class ConfirmConsumer {
             queues = ConfirmConfig.CONFIRM_QUEUE_NAME
     )
     public void receiverConfirmMessage(Message message, Channel channel) throws Exception{
-        log.info("接收到消息：{}",new String(message.getBody(),"UTF-8"));
+        log.info("队列接收到消息：{}",new String(message.getBody(),"UTF-8"));
     }
 }
