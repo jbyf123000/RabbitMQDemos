@@ -1,4 +1,4 @@
-package top.jbyf.controller;
+package top.jbyf.confirmAdv.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.jbyf.config.ConfirmConfig;
+import top.jbyf.confirmAdv.config.ConfirmConfig;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -28,7 +28,7 @@ public class ProducerController {
         String uuid = UUID.randomUUID().toString();
         correlationData.setId(uuid);
         sentMessage.put(uuid,message);
-        rabbitTemplate.convertAndSend(ConfirmConfig.CONFIRM_EXCHANGE_NAME,
+        rabbitTemplate.convertAndSend(ConfirmConfig.CONFIRM_EXCHANGE_NAME + 123,
                 ConfirmConfig.CONFIRM_ROUTING_KEY,message,correlationData);
         log.info("当前时间：{} , 给给队列 发送信息：{}",new Date().toString(),message);
     }

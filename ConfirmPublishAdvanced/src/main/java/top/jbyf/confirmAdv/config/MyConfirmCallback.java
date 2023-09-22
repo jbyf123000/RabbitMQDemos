@@ -1,4 +1,4 @@
-package top.jbyf.config;
+package top.jbyf.confirmAdv.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.connection.CorrelationData;

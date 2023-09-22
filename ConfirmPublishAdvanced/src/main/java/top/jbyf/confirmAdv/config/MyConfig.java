@@ -1,4 +1,4 @@
-package top.jbyf.config;
+package top.jbyf.confirmAdv.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;

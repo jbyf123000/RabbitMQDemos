@@ -15,6 +15,7 @@
         <module>ExchangeDemo</module>
         <module>DeadQueue</module>
         <module>TTLQueue</module>
+        <module>ConfirmPublishAdvanced</module>
     </modules>
 
     <properties>

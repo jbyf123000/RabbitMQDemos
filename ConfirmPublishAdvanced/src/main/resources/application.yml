@@ -1,0 +1,8 @@
+server:
+  port: 22112
+spring:
+  rabbitmq:
+    host: 192.168.31.249
+    username: admin
+    password: 123
+    publisher-confirm-type: correlated
