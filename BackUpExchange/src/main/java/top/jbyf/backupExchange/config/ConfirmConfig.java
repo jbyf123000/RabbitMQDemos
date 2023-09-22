@@ -17,7 +17,12 @@ public class ConfirmConfig {
 
     @Bean
     public DirectExchange confirmExchange(){
-        return new DirectExchange(CONFIRM_EXCHANGE_NAME);
+        return ExchangeBuilder
+                .directExchange(CONFIRM_EXCHANGE_NAME)
+                .durable(true)
+                .withArgument("alternate-exchange",BackupConfig.EXCHANGE_NAME)
+                .build();
+
     }
 
     @Bean

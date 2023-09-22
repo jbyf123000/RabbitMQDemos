@@ -44,7 +44,6 @@ public class MyConfirmCallback implements RabbitTemplate.ConfirmCallback, Rabbit
         }
         else {
             log.info("交换机没有收到 id 为 :{} 的消息:{}， 原因:{}",id,sentMessage.get(id),cause);
-            rabbitTemplate.convertAndSend(BackupConfig.EXCHANGE_NAME,sentMessage.get(id));
         }
     }
 
@@ -58,7 +57,6 @@ public class MyConfirmCallback implements RabbitTemplate.ConfirmCallback, Rabbit
                 replyText,
                 routingKey
         );
-        rabbitTemplate.convertAndSend(BackupConfig.EXCHANGE_NAME,new String(message.getBody()));
     }
 
 

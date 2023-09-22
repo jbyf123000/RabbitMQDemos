@@ -14,6 +14,13 @@ public class BackupConsumer {
             queues = BackupConfig.BACKUP_QUEUE
     )
     public void receiveBackup(Message message, Channel channel) throws Exception{
-        log.info("备份交换机获取到信息：{}",new String(message.getBody()));
+        log.info("备份交换机 获取到报警信息：{}",new String(message.getBody()));
+    }
+
+    @RabbitListener(
+            queues = BackupConfig.WARNING_QUEUE
+    )
+    public void receiveWarning(Message message, Channel channel) throws Exception{
+        log.info("备份交换机 获取到备份信息：{}",new String(message.getBody()));
     }
 }
