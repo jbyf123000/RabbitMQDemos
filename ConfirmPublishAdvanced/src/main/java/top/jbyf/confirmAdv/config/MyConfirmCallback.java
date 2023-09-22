@@ -1,6 +1,7 @@
 package top.jbyf.confirmAdv.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
-public class MyConfirmCallback implements RabbitTemplate.ConfirmCallback {
+public class MyConfirmCallback implements RabbitTemplate.ConfirmCallback, RabbitTemplate.ReturnCallback {
     // 注入
     @Resource
     private RabbitTemplate rabbitTemplate;
@@ -22,6 +23,7 @@ public class MyConfirmCallback implements RabbitTemplate.ConfirmCallback {
     @PostConstruct
     public void init(){
         rabbitTemplate.setConfirmCallback(this);
+        rabbitTemplate.setReturnCallback(this);
     }
 
     // 交换机确认回调的方法
@@ -44,4 +46,18 @@ public class MyConfirmCallback implements RabbitTemplate.ConfirmCallback {
             log.info("交换机没有收到 id 为 :{} 的消息:{}， 原因:{}",id,sentMessage.get(id),cause);
         }
     }
+
+
+    //交换机无法将消息进行路由时，会将该消息返回给生产者
+    @Override
+    public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
+        log.error("消息:{} ， 被交换机：{} 退回，原因：{}, 路由Key：{} ",
+                new String(message.getBody()),
+                exchange,
+                replyText,
+                routingKey
+        );
+    }
+
+
 }

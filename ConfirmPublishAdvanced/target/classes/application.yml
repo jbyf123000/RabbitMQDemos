@@ -6,3 +6,4 @@ spring:
     username: admin
     password: 123
     publisher-confirm-type: correlated
+    publisher-returns: true # 是否会退消息
