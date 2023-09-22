@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
@@ -14,6 +15,9 @@ public class MyConfirmCallback implements RabbitTemplate.ConfirmCallback {
     // 注入
     @Resource
     private RabbitTemplate rabbitTemplate;
+
+    @Resource
+    private ConcurrentHashMap<String,String> sentMessage;
 
     @PostConstruct
     public void init(){
@@ -31,13 +35,13 @@ public class MyConfirmCallback implements RabbitTemplate.ConfirmCallback {
     // 2.3 cause 失败原因
 
     @Override
-    public void confirm(CorrelationData correlationData, boolean ack, String s) {
+    public void confirm(CorrelationData correlationData, boolean ack, String cause) {
         String id = null ==correlationData ? "" : correlationData.getId();
         if (ack){
-            log.info("交换机已经收到 id 为 :{} 的消息");
+            log.info("交换机已经收到 id 为 :{} 的消息",sentMessage.get(id));
         }
         else {
-            log.info("交换机没有收到 id 为 :{} 的消息");
+            log.info("交换机没有收到 id 为 :{} 的消息， 原因:{}",sentMessage.get(id),cause);
         }
     }
 }
