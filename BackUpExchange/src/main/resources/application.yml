@@ -1,0 +1,9 @@
+server:
+  port: 33333
+spring:
+  rabbitmq:
+    host: 192.168.31.249
+    username: admin
+    password: 123
+    publisher-confirm-type: correlated
+    publisher-returns: true # 是否会回退消息

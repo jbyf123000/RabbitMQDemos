@@ -16,6 +16,7 @@
         <module>DeadQueue</module>
         <module>TTLQueue</module>
         <module>ConfirmPublishAdvanced</module>
+        <module>BackUpExchange</module>
     </modules>
 
     <properties>
