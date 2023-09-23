@@ -17,6 +17,7 @@
         <module>TTLQueue</module>
         <module>ConfirmPublishAdvanced</module>
         <module>BackUpExchange</module>
+        <module>SequenceQueue</module>
     </modules>
 
     <properties>
